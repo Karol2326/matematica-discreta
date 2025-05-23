@@ -147,8 +147,46 @@ class Entrega {
      * Pista: Cercau informació sobre els nombres de Stirling.
      */
     static int exercici1(int[] a) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+      int totalPart = particiones(a.length);
+      return totalPart;  
     }
+
+    static int particiones(int elementos) {
+            int particiones = 0;
+            for (int i = 1; i <= elementos; i++) {
+                particiones += Stirling(elementos, i);
+            }
+            return particiones;
+    }   
+
+    static int Stirling(int n, int k) {
+            int numStirling = 0;
+            for (int j = 0; j <= k; j++) {
+                numStirling += potencia(-1, k - j) * (factorial(k) / (factorial(j) * factorial(k - j))) * potencia(j, n);
+
+            }
+            numStirling = numStirling / factorial(k);
+            return numStirling;
+    } 
+
+     static public int potencia(int a, int b) {
+            int potencia = 1;
+            while (b > 0) {
+                potencia = potencia * a;
+                b--;
+            }
+            return potencia;
+        }
+
+     static public int factorial (int n){
+            int factorial = 1;
+            
+            for (; n>0; n--){
+                factorial = factorial*n;
+            }
+            return factorial;
+      }
 
     /*
      * Trobau el cardinal de la relació d'ordre parcial sobre `a` més petita que conté `rel` (si
