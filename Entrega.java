@@ -196,8 +196,95 @@ class Entrega {
      * Si no existeix, retornau -1.
      */
     static int exercici2(int[] a, int[][] rel) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+
+      //clausura reflexiva 
+            
+            for (int i = 0; i < a.length; i++) { //recorrido por el conjunto a
+                boolean existe = false;
+                for (int j = 0; j < rel.length && !existe; j++) {
+                    if (a[i] == rel[i][0] && a[i] == rel[i][1]) { // comprobar si existe (a,a)
+                        existe = true;
+                    }
+                }
+                if (!existe) { // si no existe, agregarlo a la relación
+                    rel = agregar(rel, i, i);
+                }
+            }
+
+      // clausura transitiva
+            
+            for (int[] rel1 : rel) {
+                //recorrido por el conjunto a (a,b)
+                for (int[] rel2 : rel) {
+                    // segundo recorrido (comprobar si (b,c)
+                    if (rel2[0] == rel1[1]) {
+                        boolean existe = false;
+                        for (int k = 0; k < rel.length && !existe; k++) {
+                            // tercer recorrido (comprobar si existe (a,c) )
+                            if (rel1[0] == rel[k][0] && rel2[1] == rel[k][1]) {
+                                existe = true;
+                            }
+                        }
+                        if (!existe) { // si no existe, agregarlo a la relación
+                            rel = agregar(rel, rel1[0], rel2[1]);
+                        }
+                    }
+                }
+            }
+
+      // clausura antisimétrica (a,b) (b,a) -> a = b  / (a,b) (c,d) -> a = b = c = d         
+            boolean existeClausura = true;
+            
+            for (int i = 0; i < rel.length && existeClausura; i++) { //recorrido por el conjunto (A) (a,b)  
+                for (int j = 0; j < rel.length && existeClausura; j++) { // segundo recorrido (comprobar si (b,a) a = b)
+                    if (rel[j][0] == rel[i][1] && rel[j][1] == rel[i][0] && rel[j][0] != rel[j][1]) {
+                        existeClausura = false;
+                    }
+                }
+            }
+            
+            if (existeClausura){
+                cardinal = rel.length;
+            }
+
+      rel = lexSorted(rel); // ordenar rel
+      return cardinal;
     }
+
+    static int[][] agregar(int [][]a, int x, int y){
+            int [][] nuevaRel = new int [a.length + 1][a[0].length];
+            
+            for (int i = 0; i < a.length; i++){
+                for (int j = 0; j < a[0].length; j++){
+                    nuevaRel[i][j] = a[i][j];                    
+                }
+            }
+            
+            nuevaRel[a.length][0] = x;
+            nuevaRel[a.length][1] = y;
+            return nuevaRel;
+        }
+
+    // método para comprobar el contenido de rel, no es necesario imprimir en los ejercicios 1 y 2
+    static String imprimirArray2D(int a[][]){
+            String s = "{";
+            for (int i = 0; i < a.length; i++) {
+                s += "(";
+                for (int j = 0; j < a[0].length; j++) {
+                    s += a[i][j];
+                    if (j < a[0].length - 1) {
+                        s += ",";
+                    }
+                }
+                s += ")";
+                if (i < a.length - 1) {
+                    s += ", ";
+                }
+            }            
+            s += "}";
+            return s;
+        }
 
     /*
      * Donada una relació d'ordre parcial `rel` definida sobre `a` i un subconjunt `x` de `a`,
