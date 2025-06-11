@@ -163,21 +163,12 @@ class Entrega {
     static int Stirling(int n, int k) {
             int numStirling = 0;
             for (int j = 0; j <= k; j++) {
-                numStirling += potencia(-1, k - j) * (factorial(k) / (factorial(j) * factorial(k - j))) * potencia(j, n);
+                numStirling += Math.pow(-1, k - j) * (factorial(k) / (factorial(j) * factorial(k - j))) * Math.pow(j, n);
 
             }
             numStirling = numStirling / factorial(k);
             return numStirling;
     } 
-
-     static public int potencia(int a, int b) {
-            int potencia = 1;
-            while (b > 0) {
-                potencia = potencia * a;
-                b--;
-            }
-            return potencia;
-        }
 
      static public int factorial (int n){
             int factorial = 1;
@@ -197,7 +188,8 @@ class Entrega {
      */
     static int exercici2(int[] a, int[][] rel) {
       //throw new UnsupportedOperationException("pendent");
-
+      int cardinal = -1;
+      
       //clausura reflexiva 
             
             for (int i = 0; i < a.length; i++) { //recorrido por el conjunto a
