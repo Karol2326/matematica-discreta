@@ -286,7 +286,113 @@ class Entrega {
      * - null en qualsevol altre cas
      */
     static Integer exercici3(int[] a, int[][] rel, int[] x, boolean op) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+      Integer resultado = null;
+        //el ínfim es la fita inferior máxima, es decir, el mayor número que está relacionado por abajo con el subconjunto
+
+        //primero, buscar todas las fitas inferiores
+        int indiceInf = 0;
+        int[] fitesInf = new int[a.length]; // array de las fitas inferiores
+
+        // buscar en todos los elementos del conjunto a
+        for (int i = 0; i < a.length; i++) {
+
+            // búsqueda para ver si el elemento de a está relacionado con todos los de x
+            boolean esFitaInf = true;
+            
+            for (int j = 0; j < x.length && esFitaInf; j++) { 
+
+                int k = 0; //k = i;
+                while (k < rel.length && !(rel[k][0] == a[i] && rel[k][1] == x[j])) {
+                    k++;
+                }
+
+                if (k == rel.length) { // si llega al final y no se encuentra es que no es fita 
+                    esFitaInf = false;
+                }
+
+            }
+
+            if (esFitaInf) {
+                fitesInf[indiceInf++] = a[i];
+                System.out.println("Fita inferior: " + a[i]);
+            }
+        }
+        
+        // buscar la mayor de las fitas inferiores
+            for (int i = 0; i < indiceInf; i++) { // recorrido por el array fitesInf
+                boolean esInfim = true;
+                for (int j = 0; j < indiceInf && esInfim; j++) { // recorrido por el array fitesInf
+                    int k = 0;
+                    while (k < rel.length && !(rel[k][0] == fitesInf[j] && rel[k][1] == fitesInf[i])) {
+                        k++;
+                    }
+                    if (k == rel.length){
+                        esInfim = false;
+                    }
+                }
+                if (esInfim && !op){
+                    resultado = fitesInf[i];
+                    System.out.println("Ínfimo: " + resultado);
+                }
+            }
+            if(resultado == null){
+                System.out.println("No hay ínfimo");
+            }
+            
+        //el supremo es la fita inferior máxima, es decir, el mayor número que está relacionado por abajo con el subconjunto
+        //primero, buscar todas las fitas superiores
+        int indiceSup = 0;
+        int[] fitesSup = new int[a.length]; // array de las fitas superiores
+
+        // buscar en todos los elementos del conjunto a
+        for (int i = 0; i < a.length; i++) {
+
+            // búsqueda para ver si el elemento de a está relacionado con todos los de x
+            boolean esFitaSup = true;
+
+            for (int j = 0; j < x.length && esFitaSup; j++) {
+
+                int k = 0; //k = i;
+                while (k < rel.length && !(rel[k][0] == x[j] && rel[k][1] == a[i])) {
+                    k++;
+                }
+
+                if (k == rel.length) { // si llega al final y no se encuentra es que no es fita 
+                    esFitaSup = false;
+                }
+
+            }
+
+            if (esFitaSup) {
+                fitesSup[indiceSup++] = a[i];
+                System.out.println("Fita superior: " + a[i]);
+            }
+        }
+
+        // buscar la mayor de las fitas superiores
+        for (int i = 0; i < indiceSup; i++) { // recorrido por el array fitesSup
+            boolean esSuprem = true;
+            for (int j = 0; j < indiceSup && esSuprem; j++) { // recorrido por el array fitesSup
+                int k = 0;
+                while (k < rel.length && !(rel[k][0] == fitesSup[i] && rel[k][1] == fitesSup[j])) {
+                    k++;
+                }
+                if (k == rel.length) {
+                    esSuprem = false;
+                }
+            }
+            if (esSuprem && op) {
+                resultado = fitesSup[i];
+                System.out.println("Supremo: " + resultado);
+            }
+        }
+        if (resultado == null) {
+            System.out.println("No hay supremo");
+        }
+      
+        return resultado;
+      
     }
 
     /*
