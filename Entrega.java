@@ -79,7 +79,94 @@ class Entrega {
     static final char NAND = '.';
 
     static int exercici1(char[] ops, int[] vars) {
-      throw new UnsupportedOperationException("pendent");
+    //   throw new UnsupportedOperationException("pendent"); 
+           // primero verificamos que los arrays de entrada sean válidos 
+      if (vars ==null || ops==null ||vars.length!=ops.length+1 || vars.length ==0 ) 
+        return -1; // caso inválido 
+
+      
+    int numerodeVariables =0; // contador para el número máximo de variables 
+    // encontramos el valor máximo en vars para saber cuantás variables distintas hay 
+    for (int i=0; i<vars.length; i++) {
+        if (vars[i]>=numerodeVariables ) { 
+          numerodeVariables = vars[i] + 1; // actualizamos el contador si encontramos una variables mayor }} 
+        }} 
+
+      
+          if (numerodeVariables >20) { 
+            return -1; } 
+
+          boolean esTautologia = true; 
+          boolean esContradiccion = true; 
+         
+      // generamos todas las posibles combinaciones de valores de verdad (2^numerodeVariables) 
+          int totalCombinaciones = 1<<numerodeVariables ;  
+
+      
+ // probamos cada combinacion posible de valores de verdad 
+          for (int combinacion = 0; combinacion <totalCombinaciones ; combinacion++) {
+            // evaluamos la expresión para esta combinacion de valores 
+            boolean resultado = evaluarExpresion (vars, ops, combinacion, numerodeVariables ) ; 
+            // si alguna comporabción da falso, no es tautología  
+
+            
+            if (!resultado) { 
+              esTautologia= false ;} 
+            // si alguna comprobación da verdadero, no es contradicción 
+            if (resultado ) { 
+              esContradiccion = false; } 
+            if (!esTautologia && !esContradiccion) { 
+              return -1; }  }
+
+
+      
+          // retornamos el resultado según lo encontrado 
+      
+          if (esTautologia) { return 1;} 
+          else if ( esContradiccion) { return 0; } 
+          else { return -1 ; }  } 
+
+    
+  // Método auxiliar para evaluar una expresión lógica para una combinación específica
+
+       private static boolean evaluarExpresion(int[] vars, char[] ops, int combinacion, int numVariables) {
+            // Creamos un array de booleanos que representará los valores de verdad  para cada variable
+
+            boolean[] valors = new boolean[numVariables];
+            // Recorremos todas las variables para asignarles su valor según la combinación actual
+
+            for (int i = 0; i < numVariables; i++) {
+                // Extraemos el i-ésimo bit de 'combinacion'. Si es 1, será true; si es 0, será false.
+
+                valors[i] = ((combinacion >> i) & 1) == 1;
+            }
+
+            boolean resultat = valors[vars[0]];
+            for (int i = 0; i < ops.length; i++) {
+                boolean seguentValor = valors[vars[i + 1]];
+                switch (ops[i]) {
+                    case '∧':
+                        resultat = resultat && seguentValor;
+                        break;
+                    case '∨':
+                        resultat = resultat || seguentValor;
+                        break;
+                    case '→':
+                        resultat = !resultat || seguentValor;
+                        break;
+                    case '.':
+                        resultat = !(resultat && seguentValor);
+                        break;
+                    default:
+                        return false;
+                }
+            }
+
+            return resultat;
+        }
+    }
+}
+
     }
 
     /*
