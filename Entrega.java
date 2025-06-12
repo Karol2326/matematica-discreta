@@ -141,21 +141,21 @@ class Entrega {
                 valors[i] = ((combinacion >> i) & 1) == 1;
             }
 
-            boolean resultat = valors[vars[0]];
+            boolean resultado = valors[vars[0]];
             for (int i = 0; i < ops.length; i++) {
-                boolean seguentValor = valors[vars[i + 1]];
+                boolean siguienteValor = valors[vars[i + 1]];
                 switch (ops[i]) {
                     case '∧':
-                        resultat = resultat && seguentValor;
+                        resultado = resultado && siguienteValor;
                         break;
                     case '∨':
-                        resultat = resultat || seguentValor;
+                        resultado = resultado || siguienteValor;
                         break;
                     case '→':
-                        resultat = !resultat || seguentValor;
+                        resultado = !resultado || siguienteValor;
                         break;
                     case '.':
-                        resultat = !(resultat && seguentValor);
+                        resultado = !(resultado && siguienteValor);
                         break;
                     default:
                         return false;
