@@ -162,7 +162,7 @@ class Entrega {
                 }
             }
 
-            return resultat;
+            return resultado;
         }
     }
 }
