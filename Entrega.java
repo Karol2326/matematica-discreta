@@ -947,7 +947,7 @@ class Entrega {
                 mensaje += (char)(letra2);
             }
             
-            System.out.println("mensaje = " + mensaje);
+            //System.out.println("mensaje = " + mensaje);
             return mensaje;
       
     }
