@@ -880,9 +880,6 @@ class Entrega {
                 mensajeEncriptado[i] = calculoMod(bloques[i], e, n);
             }
             
-            for (int x = 0; x< mensajeEncriptado.length; x++){
-                System.out.println(mensajeEncriptado[x]);
-            }
             return mensajeEncriptado;
       
     }
