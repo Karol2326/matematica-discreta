@@ -490,7 +490,114 @@ class Entrega {
      *  - Sinó, null.
      */
     static int[][] exercici4(int[] a, int[] b, Function<Integer, Integer> f) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+
+      // para saber si tiene inversa hay que comprobar que es bijectiva
+            boolean inyectiva = true;
+
+            // Comprobar si es inyectiva
+            for (int i = 0; i < a.length && inyectiva; i++) {
+                int x = f.apply(a[i]);
+                int cont = 0;
+                for (int j = 0; j < a.length && inyectiva; j++) {
+                    int y = f.apply(a[j]);
+                    if (x == y) {
+                        cont++;
+                    }
+                    if (cont > 1) {
+                        inyectiva = false;
+                        //System.out.println("No es inyectiva");
+                    }
+                }
+            }
+
+            boolean sobreyectiva = true;
+
+            // Comprobar si es sobreyectiva
+            int[] imagenes = new int[a.length];
+            for (int i = 0; i < a.length; i++) { // guardar las imágenes de los elementos de a
+                imagenes[i] = f.apply(a[i]);
+            }
+
+            for (int i = 0; i < b.length && sobreyectiva; i++) {
+
+                boolean encontrada = false;
+                for (int j = 0; j < imagenes.length && !encontrada; j++) {
+                    if (b[i] == imagenes[j]) {
+                        encontrada = true;
+                    }
+                }
+                if (!encontrada) {
+                    sobreyectiva = false;
+                    //System.out.println("No es sobreyectiva");
+                }
+            }
+
+            int[][] inversa = null;
+            /* 
+            Si f es biyectiva (inyectiva y sobreyectiva):
+            retornar el grafo de la inversa: conjunto de pares (f(x), x) para cada x en a
+             */
+            if (inyectiva && sobreyectiva) {
+                //System.out.println("Tiene inversa");
+                inversa = new int[a.length][2];
+
+                for (int i = 0; i < inversa.length; i++) {
+                    inversa[i][0] = f.apply(a[i]);
+                    inversa[i][1] = a[i];
+                }
+
+                /* 
+                Si f es inyectiva pero no sobreyectiva:
+                retornar el grafo de la inversa por la izquierda: conjunto de pares (f(x), x) para cada x en a
+                 */
+            } else if (inyectiva && !sobreyectiva) { // no todos los elementos de b son imagen de algún elemento de a
+
+                inversa = new int[b.length][2];
+                for (int i = 0; i < b.length; i++) {
+                    int y = b[i];
+                    boolean encontrada = false;
+                    for (int j = 0; j < a.length && !encontrada; j++) {
+                        if (f.apply(a[j]) == y) {   // encontrar la antiimagen de y, que pertenece a b
+                            inversa[i][0] = y;
+                            inversa[i][1] = a[j];
+                            encontrada = true;
+                        }
+                    }
+                    if (!encontrada) { // si el elemento de b no es imagen de un de a
+                        inversa[i][0] = y;
+                        inversa[i][1] = a[0]; // asignar cualquier cualquier x de a
+                    }
+                }
+
+                /*
+                Si f es sobreyectiva pero no inyectiva:
+                retornar el grafo de la inversa por la derecha: conjunto de pares (f(x), x) para cada f(x) en b
+                 */
+            } else if (!inyectiva && sobreyectiva) {
+
+                inversa = new int[b.length][2];
+
+                for (int i = 0; i < b.length; i++) {
+                    int y = b[i];
+
+                    boolean encontrada = false;
+                    for (int j = 0; j < a.length && !encontrada; j++) { //buscar antiimagen del elemento de b
+                        if (f.apply(a[j]).equals(y)) {
+                            inversa[i][0] = y;
+                            inversa[i][1] = a[j];
+                            encontrada = true;
+                        }
+                    }
+                }
+            }
+
+            if (inversa != null) {
+                inversa = lexSorted(inversa);
+            }
+            
+            //Si ninguna condición se cumple, retorna null
+            return inversa;
     }
 
     /*
@@ -753,8 +860,45 @@ class Entrega {
      * Pista: https://en.wikipedia.org/wiki/Exponentiation_by_squaring
      */
     static int[] exercici1(String msg, int n, int e) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+
+      // guardar los códigos ASCII de cada letra del mensaje
+            byte[] codigoASCII = msg.getBytes(); 
+            
+
+            // bloque de 2 en 2 con codificación 0-95
+            int[] bloques = new int[msg.length() / 2];
+            for (int i = 0; i < codigoASCII.length; i += 2) { // avanzar de 2 en 2
+                bloques[i / 2] = (codigoASCII[i]) * 128 + (codigoASCII[i + 1]);
+                
+            }
+            
+            // encriptado de cada bloque
+            int[] mensajeEncriptado = new int[bloques.length];
+            
+            for (int i = 0; i < mensajeEncriptado.length; i++){
+                mensajeEncriptado[i] = calculoMod(bloques[i], e, n);
+            }
+            
+            for (int x = 0; x< mensajeEncriptado.length; x++){
+                System.out.println(mensajeEncriptado[x]);
+            }
+            return mensajeEncriptado;
+      
     }
+
+    public static int calculoMod(int base, int exp, int numMod){ //base^exp mod numMod
+            int x = 1;
+            
+            int i = 0;
+            while (exp > i){
+                x = x*base;
+                x = x % numMod;
+                i++;
+            }
+            return x;
+        }
+    
 
     /*
      * Primer, desencriptau el missatge utilitzant xifrat RSA amb la clau pública donada. Després
@@ -771,8 +915,68 @@ class Entrega {
      * - n és major que 2¹⁴, i n² és menor que Integer.MAX_VALUE
      */
     static String exercici2(int[] m, int n, int e) {
-      throw new UnsupportedOperationException("pendent");
+      //throw new UnsupportedOperationException("pendent");
+        // calcular la clave privada
+            
+            // calcular phi de n
+            int phi = 1;
+            for (int i = 2; i < n; i++){
+                int [] euclides = algoritmoEuclides (i, n);
+                if (euclides[0] == 1){ // el primer elemento es el MCD
+                    phi++;
+                }
+            }
+            
+            // suponiendo que existe, calcular inversa de e mod phi de n
+            int [] euclides = algoritmoEuclides(e, phi);
+            int inversa = (euclides[1]%phi + phi) % phi; // asegurarse de que sea un número positivo
+            
+            // primero hacer el módulo
+            for (int i = 0; i < m.length; i++){
+                m[i] = calculoMod(m[i], inversa, n); 
+            }
+            
+            // decodificar el mensaje
+            String mensaje = "";
+            
+            for (int i = 0; i < m.length; i++){
+                int letra2 = m[i]%128;
+                int letra1 = ((m[i] - letra2)/128) % 128;
+                                
+                mensaje += (char)(letra1);
+                mensaje += (char)(letra2);
+            }
+            
+            System.out.println("mensaje = " + mensaje);
+            return mensaje;
+      
     }
+
+    public static int[] algoritmoEuclides(int a, int b){            
+            int x0 = 1, y0 = 0;
+            int x1 = 0, y1 = 1;
+
+            while (b != 0){
+                int q = a/b;
+                int r = a % b;
+                
+                int x2 = x0 - q*x1;
+                x0 = x1;
+                x1 = x2;
+                
+                int y2 = y0 - q*y1;
+                y0 = y1;
+                y1 = y2;
+                
+                a = b;
+                b = r;
+            }
+            
+            // a es el MCD, y x0 e y0 los coeficientes
+            int [] resultados = {a, x0, y0};
+            return resultados;
+        }
+    
 
     static void tests() {
       // Exercici 1
