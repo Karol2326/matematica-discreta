@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 /*
  * Aquesta entrega consisteix en implementar tots els mètodes anomenats "exerciciX". Ara mateix la
  * seva implementació consisteix en llançar `UnsupportedOperationException`, ho heu de canviar així
- * com els aneu fent.
+ * com els aneu fent. 
  *
  * Criteris d'avaluació:
  *
@@ -180,7 +180,43 @@ class Entrega {
      * (∀x : P(x)) <-> (∃!x : Q(x))
      */
     static boolean exercici2(int[] universe, Predicate<Integer> p, Predicate<Integer> q) {
-      throw new UnsupportedOperationException("pendent");
+    //  throw new UnsupportedOperationException("pendent"); 
+      // Verificar si todos los elementos del universo cumplen el predicado P(x)
+boolean todosCumplenP = true; // Suponemos inicialmente que todos cumplen P
+
+// Recorremos todo el array universo
+for (int i = 0; i < universe.length; i++) {
+    int elemento = universe[i]; // Obtenemos el elemento actual
+    if (!p.test(elemento)) {    // Si este elemento no cumple P(x)
+        todosCumplenP = false;  // Marcamos que no todos cumplen P
+    }
+}
+
+// Contar cuántos elementos del universo cumplen el predicado Q(x)
+int contadorQ = 0; 
+
+// Recorremos todo el array universo nuevamente
+for (int i = 0; i < universe.length; i++) {
+    int elemento = universe[i];       // Obtenemos el elemento actual
+    if (q.test(elemento)) {           // Si el elemento cumple Q(x)
+        contadorQ++;                  // Aumentamos el contador
+    }
+}
+
+// Verificar si hay exactamente un único elemento que cumple Q(x)
+boolean hayUnSoloQ = false;       // Suponemos inicialmente que no hay uno solo
+if (contadorQ == 1) {             
+    hayUnSoloQ = true;            // Entonces hay exactamente uno que cumple Q
+}
+
+// Comprobamos la equivalencia lógica entre (∀x : P(x)) y (∃!x : Q(x))
+// Si ambos valores booleanos son iguales, devolvemos true
+if (todosCumplenP == hayUnSoloQ) {
+    return true;  // La equivalencia es cierta
+} else {
+    return false; // La equivalencia es falsa
+}
+
     }
 
     static void tests() {
