@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
  * Criteris d'avaluació:
  *
  * - Si el codi no compila tendreu un 0.
- *
+ * 
  * - Les úniques modificacions que podeu fer al codi són:
  *    + Afegir un mètode (dins el tema que el necessiteu)
  *    + Afegir proves a un mètode "tests()"
@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
  * està definit a la línia 53.
  *
  * L'entrega es farà a través d'una tasca a l'Aula Digital que obrirem abans de la data que se us
- * hagui comunicat. Si no podeu visualitzar bé algun enunciat, assegurau-vos de que el vostre editor
+ * hagui comunicat. Si no podeu visualitzar bé algun enunciat, assegurau-vos de que el vostre editor 
  * de texte estigui configurat amb codificació UTF-8.
  */
 class Entrega {
@@ -816,9 +816,6 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
 
 
 
-
-
-
       
     }
 
@@ -826,9 +823,123 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
      * Determinau si els dos grafs són isomorfs. Podeu suposar que cap dels dos té ordre major que
      * 10.
      */
-    static boolean exercici2(int[][] g1, int[][] g2) {
-      throw new UnsupportedOperationException("pendent");
-    }
+
+   static boolean exercici2(int[][] g1, int[][] g2) {
+     // throw new UnsupportedOperationException("pendent");
+
+            if (g1.length != g2.length) {
+                return false; // Distinto número de nodos, no pueden ser isomorfos
+            }
+
+            int n = g1.length; // Número de nodos en el grafo
+            if (n == 0) {
+                return true; // Si ambos grafos están vacíos, son isomorfos
+            }
+            // Calculamos el grado de cada nodo para ambos grafos
+            int[] gradosG1 = calcularGrados(g1);
+            int[] gradosG2 = calcularGrados(g2);
+            if (!compararGrados(gradosG1, gradosG2)) {
+                return false; // Secuencia de grados distinta, no son isomorfos
+            }
+
+            // Creamos un array con la permutación inicial 
+            int[] permutacion = new int[n];
+            for (int i = 0; i < n; i++) {
+                permutacion[i] = i; // Inicializamos con nodos en orden natural
+            }
+
+            // Intentamos encontrar alguna permutación que haga isomorfismo
+            return generarPermutaciones(g1, g2, permutacion, 0);
+        }
+
+        // Calcula los grados de cada nodo en un grafo
+        private static int[] calcularGrados(int[][] grafo) {
+            int[] grados = new int[grafo.length]; // Array para guardar grados
+            for (int i = 0; i < grafo.length; i++) {
+                grados[i] = grafo[i].length; // El grado es la longitud del array de adyacencia
+            }
+            Arrays.sort(grados); // Ordenamos los grados para compararlos fácilmente
+            return grados;
+        }
+
+        // Compara dos secuencias de grados
+        private static boolean compararGrados(int[] g1, int[] g2) {
+            if (g1.length != g2.length) {
+                return false; // Distinta longitud, no iguales
+            }
+            for (int i = 0; i < g1.length; i++) {
+                if (g1[i] != g2[i]) {
+                    return false; // Algún grado distinto, no iguales
+                }
+            }
+            return true; // Secuencias de grados idénticas
+        }
+
+        // Genera permutaciones y verifica si alguna es isomorfismo
+        private static boolean generarPermutaciones(int[][] g1, int[][] g2, int[] perm, int k) {
+            if (k == perm.length) {
+                // Si ya generamos una permutación completa, comprobamos si es isomorfismo
+                return esIsomorfismo(g1, g2, perm);
+            }
+
+            for (int i = k; i < perm.length; i++) {
+                intercambio(perm, k, i); // Intercambiamos elementos para generar permutaciones
+                if (generarPermutaciones(g1, g2, perm, k + 1)) {
+                    return true; // Si encontramos isomorfismo, terminamos
+                }
+                intercambio(perm, k, i);  // Volvemos a intercambiar para restaurar el array
+            }
+            return false; // No se encontró ninguna permutación válida
+        }
+
+        // Intercambia dos elementos en un array
+        private static void intercambio(int[] arr, int i, int j) {
+            int temp = arr[i]; // Guardamos temporalmente el valor de arr[i]
+            arr[i] = arr[j];   // Ponemos el valor de arr[j] en arr[i]
+            arr[j] = temp;     // Ponemos el valor guardado en arr[j]
+        }
+
+        // Verifica si la permutación dada es un isomorfismo entre g1 y g2
+        private static boolean esIsomorfismo(int[][] g1, int[][] g2, int[] perm) {
+            for (int i = 0; i < g1.length; i++) {
+                // Verificamos que los grados coincidan para el nodo permutado
+                if (g1[i].length != g2[perm[i]].length) {
+                    return false; // Grados distintos, no es isomorfismo
+                }
+
+                // Creamos un array booleano para marcar conexiones mapeadas
+                boolean[] conexiones = new boolean[g2[perm[i]].length];
+                for (int j = 0; j < g1[i].length; j++) {
+                    int vecinoEnG1 = g1[i][j];          // Nodo vecino en g1
+                    int vecinoEnG2 = perm[vecinoEnG1]; // Nodo mapeado en g2
+                    boolean encontrado = false;         // Marca si encontramos la conexión
+
+                    // Buscamos el vecino mapeado en la lista de adyacencia de g2
+                    for (int k = 0; k < g2[perm[i]].length; k++) {
+                        if (g2[perm[i]][k] == vecinoEnG2) {
+                            encontrado = true;      // Conexión encontrada
+                            conexiones[k] = true;   // Marcamos conexión como usada
+                        }
+                    }
+
+                    if (!encontrado) {
+                        return false; // Si falta conexión, no es isomorfismo
+                    }
+                }
+
+                // Verificamos que todas las conexiones en g2 fueron usadas 
+                for (int i2 = 0; i2 < conexiones.length; i2++) {
+                    boolean conexion = conexiones[i2];
+                    if (!conexion) {
+                        return false; // Alguna conexión no mapeada, no es isomorfismo
+                    }
+                }
+            }
+            return true; // Todas las verificaciones pasaron, es isomorfismo
+        }
+
+
+
 
     /*
      * Determinau si el graf `g` (no dirigit) és un arbre. Si ho és, retornau el seu recorregut en
