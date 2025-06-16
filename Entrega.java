@@ -948,8 +948,88 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
      * En cas de ser un arbre, assumiu que l'ordre dels fills vé donat per l'array de veïns de cada
      * vèrtex.
      */
-    static int[] exercici3(int[][] g, int r) {
-      throw new UnsupportedOperationException("pendent");
+
+      static int[] exercici3(int[][] g, int r) { 
+     //         throw new UnsupportedOperationException("pendent");
+
+            if (g.length == 0) {
+                return null;
+            }
+
+            if (!esArbol(g)) {
+                return null;
+            }
+
+            // Creamos un array para guardar el recorrido postorden 
+            int[] postorden = new int[g.length];
+
+            // Usamos un array de tamaño 1 para simular paso por referencia y llevar el índice en postorden
+            int[] index = {0};
+
+            // Array para controlar qué nodos ya han sido visitados durante el recorrido 
+            boolean[] visitado = new boolean[g.length];
+
+            // Ejecutamos la función recursiva que hace el recorrido postorden, partiendo del nodo raíz r
+            postorden(g, r, -1, visitado, postorden, index);
+
+            // Devolvemos el recorrido postorden calculado
+            return postorden;
+        }
+
+        private static boolean esArbol(int[][] g) {
+            if (g.length == 0) {
+                return true;
+            }
+
+            // Array para marcar los nodos visitados
+            boolean[] visitado = new boolean[g.length];
+
+            // Comprobamos si tiene ciclos 
+            if (tieneCiclos(g, 0, -1, visitado)) {
+                return false; // Si hay ciclos, no es árbol
+            }
+
+            // Comprobamos que el grafo sea conexo
+            for (boolean v : visitado) {
+                if (!v) {
+                    return false; // Algún nodo no visitado -> no conexo -> no es árbol
+                }
+            }
+
+            // Si no tiene ciclos y es conexo -> es un árbol
+            return true;
+        }
+
+        private static boolean tieneCiclos(int[][] g, int actual, int padre, boolean[] visitado) {
+            visitado[actual] = true; // Marcamos el nodo actual como visitado  
+
+            // Recorremos todos los vecinos del nodo actual
+            for (int vecino : g[actual]) {
+                if (!visitado[vecino]) {
+                    if (tieneCiclos(g, vecino, actual, visitado)) {
+                        return true;
+                    }
+                } else if (vecino != padre) {
+                    // Si el vecino ya está visitado y no es el padre, significa que hay un ciclo
+                    return true;
+                }
+            }
+            return false; // No encontramos ciclos en esta rama
+        }
+
+        private static void postorden(int[][] g, int actual, int padre, boolean[] visitado, int[] postorden, int[] index) {
+            visitado[actual] = true; // Marcamos el nodo actual como visitado
+
+            // Recorremos los vecinos que no son el padre y que aún no hemos visitado
+            for (int vecino : g[actual]) {
+                if (vecino != padre && !visitado[vecino]) {
+                    postorden(g, vecino, actual, visitado, postorden, index);
+                }
+            }
+
+            // Una vez visitados todos los hijos, añadimos el nodo actual al recorrido postorden
+            postorden[index[0]++] = actual;
+        }
     }
 
     /*
