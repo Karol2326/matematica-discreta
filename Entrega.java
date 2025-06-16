@@ -768,8 +768,58 @@ if (todosCumplenP == hayUnSoloQ) {
     /*
      * Determinau si el graf `g` (no dirigit) té cicles.
      */
-    static boolean exercici1(int[][] g) {
-      throw new UnsupportedOperationException("pendent");
+
+        static boolean exercici1(int[][] g) { 
+           //      throw new UnsupportedOperationException("pendent"); 
+
+   
+    int n = g.length; // Obtenemos el número total de nodos en el grafo
+
+    boolean[] visitado = new boolean[n]; // Creamos un array para marcar qué nodos ya hemos visitado
+
+    // Recorremos todos los nodos del grafo
+    for (int nodo = 0; nodo < n; nodo++) {
+        // Si el nodo aún no ha sido visitado
+        if (!visitado[nodo]) {
+            // Iniciamos una búsqueda en profundidad desde este nodo
+            if (tieneCiclo(g, nodo, -1, visitado)) { // Usamos -1 como padre porque es el inicio
+                return true; // Si encontramos un ciclo, devolvemos true inmediatamente
+            }
+        }
+    }
+
+    return false; // Si recorremos todo el grafo sin encontrar ciclos, devolvemos false
+}
+
+// Función auxiliar  para detectar ciclos
+private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] visitado) {
+    visitado[actual] = true; // Marcamos el nodo actual como visitado
+
+    for (int i = 0; i < g[actual].length; i++) { // Recorremos todos los vecinos del nodo actual
+        int vecino = g[actual][i]; // Obtenemos el vecino actual
+
+        if (!visitado[vecino]) { // Si el vecino no ha sido visitado
+            if (tieneCiclo(g, vecino, actual, visitado)) { // Continuamos buscando desde el vecino
+                return true; // Si se detecta un ciclo en la rama, devolvemos true
+            }
+        } else if (vecino != padre) { // Si ya fue visitado y no es el padre
+            return true; // Hay un ciclo porque volvemos a un nodo ya visitado
+        }
+    }
+
+    return false; // No se encontró ciclo desde este nodo
+}
+
+
+
+
+
+
+
+
+
+
+      
     }
 
     /*
