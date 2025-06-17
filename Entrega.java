@@ -1059,7 +1059,7 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
 
 
             public static int exercici4(char[][] mapa) { 
-                    throw new UnsupportedOperationException("pendent");
+                //    throw new UnsupportedOperationException("pendent");
 
             int files = mapa.length;  // Número de filas del mapa
             if (files == 0) {         // Si el mapa está vacío , devolvemos -1 
