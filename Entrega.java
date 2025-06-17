@@ -167,7 +167,7 @@ class Entrega {
     //}
 //}
 
-    }
+   // }
 
     /*
      * Aquest mètode té de paràmetre l'univers (representat com un array) i els predicats
