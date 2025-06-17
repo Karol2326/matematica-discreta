@@ -1233,12 +1233,12 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
             // decodificar el mensaje
             String mensaje = "";
             
-            for (int i = 0; i < m.length; i++){
-                int letra2 = m[i]%128;
-                int letra1 = ((m[i] - letra2)/128) % 128;
-                                
-                mensaje += (char)(letra1);
-                mensaje += (char)(letra2);
+            for (int bloque : m) {
+                int letra2 = bloque % 128;
+                int letra1 = ((bloque - letra2) / 128) % 128;
+                
+                mensaje += (char) letra1;
+                mensaje += (char) letra2;
             }
             
             //System.out.println("mensaje = " + mensaje);
