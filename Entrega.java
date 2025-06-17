@@ -1154,23 +1154,43 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
             int[] mensajeEncriptado = new int[bloques.length];
             
             for (int i = 0; i < mensajeEncriptado.length; i++){
-                mensajeEncriptado[i] = calculoMod(bloques[i], e, n);
+                mensajeEncriptado[i] = expModular(bloques[i], e, n);
             }
             
             return mensajeEncriptado;
       
     }
 
-    public static int calculoMod(int base, int exp, int numMod){ //base^exp mod numMod
-            int x = 1;
-            
-            int i = 0;
-            while (exp > i){
-                x = x*base;
-                x = x % numMod;
-                i++;
+          // Exponenciación modular 
+        public static int expModular(int base, int exp, int mod) {
+            int result = 1;
+            int b = base % mod;
+
+            while (exp > 0) {
+                if (exp % 2 == 1) {
+                    result = modMult(result, b, mod);
+                }
+                b = modMult(b, b, mod);
+                exp = exp / 2;
             }
-            return x;
+
+            return result;
+        }
+        
+        // Multiplicación modular segura sin overflow
+        public static int modMult(int a, int b, int mod) {
+            int result = 0;
+            a = a % mod;
+
+            while (b > 0) {
+                if (b % 2 == 1) {
+                    result = (result + a) % mod;
+                }
+                a = (a + a) % mod;
+                b = b / 2;
+            }
+
+            return result;
         }
     
 
@@ -1207,7 +1227,7 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
             
             // primero hacer el módulo
             for (int i = 0; i < m.length; i++){
-                m[i] = calculoMod(m[i], inversa, n); 
+                m[i] = expModular(m[i], inversa, n); 
             }
             
             // decodificar el mensaje
