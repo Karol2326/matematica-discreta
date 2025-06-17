@@ -1143,7 +1143,7 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
             byte[] codigoASCII = msg.getBytes(); 
             
 
-            // bloque de 2 en 2 con codificación 0-95
+            // bloque de 2 en 2 con codificación ASCII
             int[] bloques = new int[msg.length() / 2];
             for (int i = 0; i < codigoASCII.length; i += 2) { // avanzar de 2 en 2
                 bloques[i / 2] = (codigoASCII[i]) * 128 + (codigoASCII[i + 1]);
