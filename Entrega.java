@@ -438,7 +438,6 @@ if (todosCumplenP == hayUnSoloQ) {
 
             if (esFitaInf) {
                 fitesInf[indiceInf++] = a[i];
-                System.out.println("Fita inferior: " + a[i]);
             }
         }
         
@@ -456,11 +455,11 @@ if (todosCumplenP == hayUnSoloQ) {
                 }
                 if (esInfim && !op){
                     resultado = fitesInf[i];
-                    System.out.println("Ínfimo: " + resultado);
                 }
             }
+      
             if(resultado == null){
-                System.out.println("No hay ínfimo");
+                //System.out.println("No hay ínfimo");
             }
             
         //el supremo es la fita inferior máxima, es decir, el mayor número que está relacionado por abajo con el subconjunto
@@ -489,7 +488,6 @@ if (todosCumplenP == hayUnSoloQ) {
 
             if (esFitaSup) {
                 fitesSup[indiceSup++] = a[i];
-                System.out.println("Fita superior: " + a[i]);
             }
         }
 
@@ -507,11 +505,10 @@ if (todosCumplenP == hayUnSoloQ) {
             }
             if (esSuprem && op) {
                 resultado = fitesSup[i];
-                System.out.println("Supremo: " + resultado);
             }
         }
         if (resultado == null) {
-            System.out.println("No hay supremo");
+            //System.out.println("No hay supremo");
         }
       
         return resultado;
