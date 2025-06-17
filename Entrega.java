@@ -817,7 +817,7 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
 
 
       
-    }
+    //}
 
     /*
      * Determinau si els dos grafs són isomorfs. Podeu suposar que cap dels dos té ordre major que
@@ -1030,7 +1030,7 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
             // Una vez visitados todos los hijos, añadimos el nodo actual al recorrido postorden
             postorden[index[0]++] = actual;
         }
-    }
+  //  }
 
     /*
      * Suposau que l'entrada és un mapa com el següent, donat com String per files (vegeu els tests)
