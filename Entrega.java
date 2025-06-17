@@ -1056,10 +1056,96 @@ private static boolean tieneCiclo(int[][] g, int actual, int padre, boolean[] vi
      *
      * Si és impossible, retornau -1.
      */
-    static int exercici4(char[][] mapa) {
-      throw new UnsupportedOperationException("pendent");
-    }
 
+
+            public static int exercici4(char[][] mapa) { 
+                    throw new UnsupportedOperationException("pendent");
+
+            int files = mapa.length;  // Número de filas del mapa
+            if (files == 0) {         // Si el mapa está vacío , devolvemos -1 
+                return -1;
+            }
+
+            int columnes = mapa[0].length;  // Número de columnas 
+            int origenX = -1, origenY = -1, destiX = -1, destiY = -1;  // Variables para almacenar coordenadas de 'O' y 'D'
+
+            // Buscar las posiciones de 'O' (origen) y 'D' (destino) en el mapa
+            for (int i = 0; i < files; i++) {
+                for (int j = 0; j < columnes; j++) {
+                    if (mapa[i][j] == 'O') {  // Si encontramos la 'O'
+                        origenX = i;
+                        origenY = j;
+                    } else if (mapa[i][j] == 'D') {  // Si encontramos la 'D'
+                        destiX = i;
+                        destiY = j;
+                    }
+                }
+            }
+
+            // Si no se encontró ni la 'O' ni la 'D', devolvemos -1 porque no hay camino posible
+            if (origenX == -1 || destiX == -1) {
+                return -1;
+            }
+
+            // Usamos una búsqueda  para encontrar el camino más corto desde 'O' a 'D'
+            boolean[][] visitat = new boolean[files][columnes];
+            int maxTamany = files * columnes;  // Tamaño máximo posible para la cola (número máximo de casillas)
+            int[] colaX = new int[maxTamany];   // Cola para almacenar coordenadas X de las casillas por visitar
+            int[] colaY = new int[maxTamany];   // Cola para almacenar coordenadas Y de las casillas por visitar
+            int[] colaDist = new int[maxTamany]; // Cola para almacenar la distancia desde el origen a cada casilla
+            int inici = 0, fi = 0;              // Punteros de inicio y fin para la cola
+
+            // Insertamos la posición de origen en la cola y la marcamos como visitada
+            colaX[fi] = origenX;
+            colaY[fi] = origenY;
+            colaDist[fi] = 0;
+            fi++;
+            visitat[origenX][origenY] = true;
+
+            // Vectores para movernos arriba, abajo, izquierda y derecha
+            int[] dx = {-1, 1, 0, 0};
+            int[] dy = {0, 0, -1, 1};
+
+            // Mientras haya casillas en la cola por explorar
+            while (inici < fi) {
+                int x = colaX[inici];   // Sacamos la casilla actual de la cola
+                int y = colaY[inici];
+                int dist = colaDist[inici];
+                inici++;
+
+                // Si la casilla actual es la de destino, devolvemos la distancia acumulada
+                if (x == destiX && y == destiY) {
+                    return dist;
+                }
+
+                // Comprobamos las 4 posibles casillas vecinas
+                for (int k = 0; k < 4; k++) {
+                    int nx = x + dx[k];  // Nueva posición fila
+                    int ny = y + dy[k];  // Nueva posición columna
+
+                    // Comprobamos que la nueva posición esté dentro de los límites del mapa
+                    if (nx >= 0 && nx < files && ny >= 0 && ny < columnes) {
+                        char c = mapa[nx][ny];  // Obtenemos el carácter en la nueva posición
+
+                        // Si no está visitada y no es un obstáculo ('#'), la añadimos a la cola
+                        if (!visitat[nx][ny] && c != '#') {
+                            visitat[nx][ny] = true;
+                            colaX[fi] = nx;
+                            colaY[fi] = ny;
+                            colaDist[fi] = dist + 1;  // La distancia es la de la casilla actual + 1
+                            fi++;
+                        }
+                    }
+                }
+            }
+
+            return -1; // Si no se puede llegar a 'D' desde 'O', devolvemos -1
+        }
+
+
+
+
+    
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
      */
